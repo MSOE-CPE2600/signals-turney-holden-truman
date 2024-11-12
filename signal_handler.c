@@ -2,11 +2,13 @@
  * @file signal_handler.c
  * @brief Sets a signal handler for SIGINT, the handler prints a message and then quits
  */
-
+//gcc signal_handler.c -o signal_handler
 /**
- * Modified by:
+ * Modified by: Holden Truman
  * 
  * Brief summary of modifications:
+ * Removed exit(1) from signal handler, so program doesn't exit when SIGINT is received (Ctrl+C)
+ * To Kill the program I ran $ kill -SIGKILL 367040 in the terminal, where I got the pid from $ ps all
  */
 
 
@@ -16,11 +18,11 @@
 #include <stdio.h>
 
 /**
- * @brief Signal handler for SIGINT - prints a message and exits
+ * @brief Signal handler for SIGINT - prints a message and continues (exit removed)
  */
 void handle_signal() {
     printf("Received a signal\n");
-    exit(1);
+    //exit(1);
 }
 
 int main() {
