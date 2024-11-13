@@ -21,6 +21,14 @@
 int my_points = 0;
 int other_points = 0;
 
+void play_system_bell() {
+    // Print the ASCII Bell character to the standard output
+    printf("\a");
+
+    // Flush the output buffer to ensure the bell character is sent immediately
+    fflush(stdout);
+}
+
 // Signal handler for SIGUSR2, winner serves
 void handle_serve(int sig, siginfo_t *siginfo, void *context) { 
     my_points++; //server scored
@@ -36,6 +44,7 @@ void handle_serve(int sig, siginfo_t *siginfo, void *context) {
     new_sig_value.sival_int = 0; //hit count is 0
     
     printf("Server Served\n");
+    play_system_bell();
     sigqueue(pid, SIGUSR1, new_sig_value);
 }
 
@@ -48,6 +57,7 @@ void handle_ball(int sig, siginfo_t *siginfo, void *context) {
     union sigval new_sig_value;
     new_sig_value.sival_int = siginfo->si_value.sival_int + 1; //increment the value by 1
     if ((rand() % 100) < 60) { //successfully returns ball
+        play_system_bell();
         sigqueue(pid, SIGUSR1, new_sig_value);
         printf("Sender returned ball. Hit #%d\n", new_sig_value.sival_int);
     } else {
@@ -95,6 +105,7 @@ int main() {
 
     printf("Server Served\n");
     // Send the SIGUSR1 signal with the sival_int value using sigqueue
+    play_system_bell();
     sigqueue(pid, SIGUSR1, sig_value);
 
     while (1) {
